@@ -1,7 +1,11 @@
 from django.db import models
+from django.conf import settings
 
 from .utils import url_generator, create_short_url
 # Create your models here.
+
+
+URL_LEN_MAX = getattr(settings, "URL_LEN_MAX", 15)
 
 
 class ShortenerURLManager(models.Manager):
@@ -17,7 +21,7 @@ class ShortenerURLManager(models.Manager):
 
 class ShortenerURL(models.Model):
 	url = models.CharField(max_length=200)
-	short_url = models.CharField(max_length=20, unique=True, blank=True)
+	short_url = models.CharField(max_length=URL_LEN_MAX, unique=True, blank=True)
 	create_date = models.DateTimeField(auto_now_add=True)
 	active = models.BooleanField(default=True)
 
