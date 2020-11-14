@@ -1,1 +1,7 @@
-<h1>Hello</h1>
+<div style='width: 100px; margin: 0 auto;'>
+	<h1>URL Shortener 3000</h1>
+	<form method='POST' action='.'> {% csrf_token %}
+		<input name='url' type='text' placeholder="url"><br><br>
+		<input type='submit' placeholder="Shorten url">
+	</form>
+</div>
