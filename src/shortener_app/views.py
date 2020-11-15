@@ -1,6 +1,8 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views import View
+
+from analytics.models import ClickEvent
 
 from .forms import SubmitUrlForm
 from .models import ShortenerURL
@@ -39,11 +41,11 @@ class HomeView(View):
 		
 		return render(request, template, context)
 
-class ShortenerCBView(View):
+class URL_Redirect(View):
 	def get(self, request, short_url=None, *args, **kwargs):
-		obj_url = None
-		qs = ShortenerURL.objects.filter(short_url__iexact=short_url.upper())
-		if qs.exists and qs.count() == 1:
-			obj = qs.first()
-			obj_url = obj.url
-		return HttpResponse("hello {short_url}".format(short_url=obj_url))
+		qs = ShortenerURL.objects.filter(short_url__iexact=short_url)
+		if qs.count() != 1 and not qs.exists():
+			raise Http404
+		obj = qs.first()
+		print(ClickEvent.objects.create_event(obj))
+		return HttpResponseRedirect(obj.url)

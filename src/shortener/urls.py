@@ -6,5 +6,5 @@ from shortener_app.views import URL_Redirect, HomeView
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^$', HomeView.as_view()),
-    re_path(r'b/(?P<short_url>[\w-]{6,15})/$', URL_Redirect.as_view(), name='short_url'),
+    re_path(r'(?P<short_url>[\w-]+)/$', URL_Redirect.as_view(), name='short_url'),
 ]
